@@ -1,0 +1,434 @@
+
+<!doctype html>
+<html>
+<head>
+  <title>Learning Tree</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+ <script type="text/javascript" src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
+
+ <style type="text/css">
+   body {
+     font: 12pt verdana;
+     background-color: black;
+   }
+
+   #mynetwork {
+     width: 1200px;
+     height: 600px;
+     background-color: black;
+     display: block;
+   }
+
+   .heading{
+     color: white;
+     padding-left:2%;
+     font: 20pt;
+
+   }
+
+   .buttonClass{
+     color:white;
+     display:inline;
+     background-color: RGB(240,215,0);
+     width: 8%;
+     height: 10px;
+     text-align: center;
+     padding-top: 4px;
+     padding-bottom: 4px;
+     padding-left:4px;
+     padding-right: 4px;
+     border-radius: 4px;
+     margin-left: 15px;
+   }
+
+   select{
+     color:white;
+     display:inline;
+     background-color: RGB(240,215,0);
+     width: 150px;
+     height: 28px;
+     text-align: center;
+     padding-top: 4px;
+     padding-bottom: 4px;
+     padding-left:4px;
+     padding-right: 4px;
+     border-radius: 4px;
+     margin-left: 15px;
+     font: 12pt verdana;
+
+   }
+
+   .buttonClass:hover{
+     cursor:hand;
+   }
+ .buttons{
+   display: block;
+
+   padding: 1%;
+
+ }
+ .screen{
+   padding-left: 50px;
+ }
+
+ h1{
+ color:white;
+ font-size: 18px;}
+ h2{
+   color:white;
+   font-size: 16px;
+ }
+ .ref{
+   color:white
+ }
+
+ .buttonsX:hover{
+  transform: scale(1.2);
+  display:inline-block;
+  transition: transform 200ms ease-in-out;
+   cursor: pointer;
+
+
+ }
+ /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #f0d700;
+  text-decoration: none;
+  cursor: pointer;
+}
+ </style>
+
+</head>
+<body>
+
+  <div class = "screen">
+      <img src="logo.png" alt="TEDI-London Logo" width= 172 height= 58>
+  <h1 id = "title">The Learning Tree (Explore Mode)</h1>
+  <img class = "buttonsX" src="telescope2.png" id = "Explore" alt="Topic Explore" width="50" height="50">
+  <img class = "buttonsX" src="book.png" id = "Learn" alt="Pathways" width="50" height="50">
+
+
+    <select id='nodeFilterSelect' style="display:none;">
+      <option value=''>Filter Modules</option>
+      <option value='mod1'>Module 1 </option>
+      <option value='mod2'>Module 2 </option>
+      <option value='mod3'>Module 3</option>
+    </select>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close"> x </span>
+    <p>Node Information</p>
+    <p> Node Title </p>
+    <p> Node Level </p>
+    <p> Modules </p>
+    <p> Node Link </p>
+  </div>
+
+</div>
+
+
+
+
+  <br>
+  <br>
+  <br></br>
+  <div id="mynetwork"></div>
+  <div class = "ref">Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
+  <!-- <div id="mynetwork2"></div>-->
+
+</div>
+  <script type="text/javascript">
+
+
+      // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+  var mode = "Explore"
+
+    const nodeFilterSelector = document.getElementById('nodeFilterSelect')
+
+    $("#Explore").click(function(){
+      mode = "Explore"
+        $("#nodeFilterSelect").fadeOut(300);
+
+      $("#title").html("The Learning Tree (Explore Mode)");
+  });
+  $("#Learn").click(function(){
+    mode = "Learn"
+    $("#nodeFilterSelect").fadeIn(500);
+      $("#title").html("The Learning Tree (Learn Mode)");
+ });
+
+
+
+    function startNetwork(data) {
+      const container = document.getElementById('mynetwork')
+      const container2 = document.getElementById('mynetwork2')
+      const options = {
+      nodes: {
+        shape: "dot",
+        size: 30,
+        font: {
+          size: 12,
+          color: "white"
+        },
+        borderWidth: 2,
+        shadow: true
+      },
+      edges: {
+        width: 2,
+        shadow: true
+      }
+      };
+
+      network = new vis.Network(container, data, options)
+      //network2 = new vis.Network(container2, data,options)
+      network.on( 'click', function(properties) {
+
+
+        if(mode == "Explore"){
+          var xcoord = properties.pointer.DOM.x
+          var ycoord = properties.pointer.DOM.y
+          var options = {
+              position: {x:xcoord,y:ycoord},
+              offset: {x:400, y:200},
+              scale: 1,
+              animation: true // default duration is 1000ms and default easingFunction is easeInOutQuad.
+          };
+          this.moveTo(options);
+
+        }
+        else{
+          console.log("We're learning, clicking!")
+          var modal = document.getElementById("myModal");
+          if(properties.nodes.length > 0){
+            modal.style.display = "block";
+
+          }
+
+        }
+        console.log(properties.nodes);
+        console.log(properties);
+
+
+
+      });
+      //var two = new vis.Network(container2, data, options)
+
+    }
+
+    var nodesArray = [
+    { id: 0, label: "Computer Internet Literacy", group: 4,  module:1 },
+    { id: 2, label: "Python Programming", group: 4, module:1},
+    { id: 3, label: "Characters Strings and Looping", group: 4,module:1 },
+    { id: 5, label: "Computational Thinking", group: 4,module:1 },
+    { id: 6, label: "Debugging", group: 4, module:1 },
+    { id: 7, label: "HTML and CSS", group: 4,module:1 },
+    { id: 8, label: "JavaScript", group: 4,module:1 },
+    { id: 12, label: "Web Development", group: 4, module:1},
+    { id: 13, label: "Testing", group: 4, module:1 },
+    { id: 16, label: "Algorithms", group: 4, module:3},
+    { id: 17, label: "Databases", group: 4, module:3 },
+    { id: 18, label: "Big Data", group: 4,module:3 },
+    { id: 19, label: "Object Oriented Design", group: 4 ,module:3},
+    { id: 20, label: "A learning node", group: 7, module: 3},
+    { id: 21, label: "A learning node", group: 7, module: 3},
+    { id: 22, label: "A learning node", group: 6, module: 3},
+    { id: 23, label: "A learning node", group: 6, module: 3},
+    { id: 24, label: "A learning node", group: 6, module: 2},
+    { id: 25, label: "A learning node", group: 6, module: 2},
+    { id: 26, label: "A learning node", group: 6, module: 2},
+    { id: 27, label: "A learning node", group: 6, module: 2},
+    { id: 28, label: "A learning node", group: 6, module: 2},
+    { id: 29, label: "A learning node", group: 6, module: 2},
+    { id: 30, label: "A learning node", group: 7, module: 2},
+    { id: 31, label: "A learning node", group: 7, module: 2},
+    { id: 32, label: "A learning node", group: 6, module: 3},
+    { id: 33, label: "A learning node", group: 7, module: 2},
+    { id: 34, label: "A learning node", group: 6, module: 3},
+    { id: 35, label: "A learning node", group: 6, module: 2},
+    { id: 36, label: "A learning node", group: 7, module: 2},
+    { id: 37, label: "A learning node", group: 6, module: 3},
+    { id: 38, label: "A learning node", group: 6, module: 2},
+    { id: 39, label: "A learning node", group: 6, module: 2},
+    { id: 40, label: "A learning node", group: 7, module: 2},
+    { id: 41, label: "A learning node", group: 6, module: 2},
+    { id: 42, label: "A learning node", group: 7, module: 2},
+    { id: 43, label: "A learning node", group: 7, module: 2},
+    { id: 44, label: "A learning node", group: 7, module: 2},
+    { id: 45, label: "Node", group: 3, module: 3},
+    { id: 46, label: "Node", group: 3, module: 3},
+    { id: 47, label: "Node", group: 3, module: 3},
+    { id: 48, label: "Node", group: 3, module: 3},
+    { id: 49, label: "Node", group: 3, module: 3},
+    { id: 50, label: "Node", group: 3, module: 3},
+    { id: 51, label: "Node", group: 3, module: 3},
+    { id: 52, label: "Node", group: 3, module: 3},
+    { id: 53, label: "Node", group: 3, module: 3},
+    { id: 54, label: "Node", group: 3, module: 3}
+
+    ];
+    var edgesArray = [
+    { from: 0, to: 5 },
+    {from: 5, to: 3},
+    {from:3, to: 2},
+    {from: 3, to: 7},
+    {from: 7, to:8 },
+    {from: 8, to: 12},
+    {from: 17, to: 18},
+    {from: 16, to: 17},
+    {from: 2, to: 6},
+    {from: 7, to: 6},
+    {from: 6, to: 13},
+    {from: 2, to: 16},
+    {from: 16, to: 19},
+    {from: 20, to:21},
+    {from: 22, to: 23},
+    {from: 22, to: 24},
+    {from: 24, to: 23},
+    {from: 25, to: 28},
+    {from: 23, to: 25},
+    {from: 28, to: 26},
+    {from: 24, to: 27},
+    {from: 28, to: 29},
+    {from: 28, to: 27},
+    {from: 30, to:31},
+    {from: 32, to: 23},
+    {from: 32, to: 34},
+    {from: 34, to: 23},
+    {from: 35, to: 38},
+    {from: 33, to: 44},
+    {from: 38, to: 26},
+    {from: 34, to: 37},
+    {from: 38, to: 39},
+    {from: 38, to: 41},
+    {from: 42, to: 36},
+    {from: 30, to: 36},
+    {from: 43, to: 33},
+    {from: 33, to: 36},
+    {from: 40, to: 44},
+    {from: 44, to: 21},
+    {from: 45, to: 53},
+    {from: 46, to: 54},
+    {from: 47, to: 51},
+    {from: 48, to: 52},
+    {from: 49, to: 46},
+    {from: 50, to: 48},
+    {from: 51, to: 52},
+    {from: 52, to: 45},
+    {from: 49, to: 45}
+
+    ];
+
+
+
+    nodes = new vis.DataSet(nodesArray);
+    edges = new vis.DataSet(edgesArray);
+
+    /**
+     * filter values are updated in the outer scope.
+     * in order to apply filters to new values, DataView.refresh() should be called
+     */
+    let nodeFilterValue = ''
+
+
+    /*
+      filter function should return true or false
+      based on whether item in DataView satisfies a given condition.
+    */
+    const nodesFilter = (nodey) => {
+      if (nodeFilterValue === '') {
+        return true
+      }
+      switch(nodeFilterValue) {
+        case('mod1'):
+          return nodey.module === 1
+        case('mod2'):
+          return nodey.module === 2
+        case('mod3'):
+          return nodey.module === 3
+        default:
+          return true
+      }
+    }
+
+    var myFilter = "all";
+
+    const nodesView = new vis.DataView(nodes, { filter: nodesFilter });
+
+
+
+    nodeFilterSelector.addEventListener('change', (e) => {
+      // set new value to filter variable
+      nodeFilterValue = e.target.value
+      /*
+        refresh DataView,
+        so that its filter function is re-calculated with the new variable
+      */
+      nodesView.refresh()
+    })
+
+
+
+
+
+    startNetwork({ nodes: nodesView, edges: edges })
+
+  </script>
+</body>
+</html>
