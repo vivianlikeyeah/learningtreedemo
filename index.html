@@ -112,8 +112,10 @@
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+  border-radius: 25px;
+  width: 25%;
+  border: 10px solid #f0d700;
+
 }
 
 /* The Close Button */
@@ -153,7 +155,7 @@
 <div id="myModal" class="modal">
 
   <!-- Modal content -->
-  <div class="modal-content">
+  <div id = "modal-content" class="modal-content">
     <span class="close"> x </span>
     <p>Node Information</p>
     <p> Node Title </p>
@@ -257,6 +259,23 @@
           console.log("We're learning, clicking!")
           var modal = document.getElementById("myModal");
           if(properties.nodes.length > 0){
+            console.log(properties.nodes)
+            if(nodeData[properties.nodes[0]]){
+              var modalcontent = document.getElementById("modal-content")
+              //modalcontent.innerHTML =
+              var text = ""
+              var html = text.concat("<p> Node: <b>", nodeData[properties.nodes[0]].title,
+              "</b><p> Node URL: ", "<a href=\"", nodeData[properties.nodes[0]].url , "\" target=\"_blank\">Learn Now</a>" )
+              modalcontent.innerHTML = html
+              console.log(nodeData[properties.nodes[0]].title)
+              console.log(nodeData[properties.nodes[0]].url)
+              console.log(html)
+              console.log("ooo")
+
+            }
+            else{
+              alert("We don't have data for this node yet. Please add.")
+            }
             modal.style.display = "block";
 
           }
@@ -270,6 +289,11 @@
       });
       //var two = new vis.Network(container2, data, options)
 
+    }
+    nodeData ={
+      "0":{title:"Computer Internet Literacy", url:"https://www.google.com"},
+      "2":{title: "Python Programming", url:"https://www.google.com"},
+      "3":{title: "Characters Strings and Looping", url:"www.google.com"}
     }
 
     var nodesArray = [
