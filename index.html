@@ -112,7 +112,7 @@
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
-  border-radius: 25px;
+  border-radius: 5px;
   width: 25%;
   border: 10px solid #f0d700;
 
@@ -207,14 +207,15 @@
     $("#Explore").click(function(){
       mode = "Explore"
         $("#nodeFilterSelect").fadeOut(300);
+        $("#title").html("The Learning Tree (Explore Mode)");
 
-      $("#title").html("The Learning Tree (Explore Mode)");
-  });
-  $("#Learn").click(function(){
-    mode = "Learn"
-    $("#nodeFilterSelect").fadeIn(500);
+    });
+
+    $("#Learn").click(function(){
+      mode = "Learn"
+      $("#nodeFilterSelect").fadeIn(500);
       $("#title").html("The Learning Tree (Learn Mode)");
- });
+    });
 
 
 
@@ -244,8 +245,11 @@
 
 
         if(mode == "Explore"){
-          var xcoord = properties.pointer.DOM.x
-          var ycoord = properties.pointer.DOM.y
+
+          var xcoord = properties.pointer.DOM.x;
+          var ycoord = properties.pointer.DOM.y;
+          console.log(xcoord);
+          console.log(ycoord);
           var options = {
               position: {x:xcoord,y:ycoord},
               offset: {x:400, y:200},
@@ -256,7 +260,6 @@
 
         }
         else{
-          console.log("We're learning, clicking!")
           var modal = document.getElementById("myModal");
           if(properties.nodes.length > 0){
             console.log(properties.nodes)
@@ -270,7 +273,6 @@
               console.log(nodeData[properties.nodes[0]].title)
               console.log(nodeData[properties.nodes[0]].url)
               console.log(html)
-              console.log("ooo")
               modal.style.display = "block";
 
             }
@@ -294,7 +296,8 @@
     nodeData ={
       "0":{title:"Computer Internet Literacy", url:"https://www.google.com"},
       "2":{title: "Python Programming", url:"https://www.google.com"},
-      "3":{title: "Characters Strings and Looping", url:"www.google.com"}
+      "3":{title: "Characters Strings and Looping", url:"www.google.com"},
+      "18": {title: "Big Data", url: "https://view.genial.ly/5ee849dda768150d70e15e68/interactive-content-big-data-intro"}
     }
 
     var nodesArray = [
@@ -307,9 +310,9 @@
     { id: 8, label: "JavaScript", group: 4,module:1 },
     { id: 12, label: "Web Development", group: 4, module:1},
     { id: 13, label: "Testing", group: 4, module:1 },
-    { id: 16, label: "Algorithms", group: 4, module:3},
-    { id: 17, label: "Databases", group: 4, module:3 },
-    { id: 18, label: "Big Data", group: 4,module:3 },
+    { id: 16, label: "Algorithms", group: 4, module:1},
+    { id: 17, label: "Databases", group: 4, module:1 },
+    { id: 18, label: "Big Data", group: 4,module:1 },
     { id: 19, label: "Object Oriented Design", group: 4 ,module:3},
     { id: 20, label: "A learning node", group: 7, module: 3},
     { id: 21, label: "A learning node", group: 7, module: 3},
