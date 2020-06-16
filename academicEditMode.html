@@ -1,0 +1,230 @@
+<html>
+<head>
+<script type="text/javascript" src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<style type="text/css">
+  body, select {
+    font: 10pt verdana;
+  }
+  #mynetwork {
+    position:relative;
+    width: 1000px;
+    height: 600px;
+    border: 1px solid lightgray;
+  }
+  table.legend_table {
+    font-size: 11px;
+    border-width:1px;
+    border-color:#d3d3d3;
+    border-style:solid;
+  }
+  table.legend_table,td {
+    border-width:1px;
+    border-color:#d3d3d3;
+    border-style:solid;
+    padding: 2px;
+  }
+  div.table_content {
+    width:80px;
+    text-align:center;
+  }
+  div.table_description {
+    width:100px;
+  }
+
+  #operation {
+    font-size:28px;
+  }
+  #network-popUp {
+    display:none;
+    position:absolute;
+    top:350px;
+    left:170px;
+    z-index:299;
+    width:250px;
+    height:120px;
+    background-color: #f9f9f9;
+    border-style:solid;
+    border-width:3px;
+    border-color: #5394ed;
+    padding:10px;
+    text-align: center;
+  }
+</style>
+<script type="text/javascript" src="https://visjs.github.io/vis-network/examples/network/exampleUtil.js"></script>
+
+<script type="text/javascript">
+  var nodes = null;
+  var edges = null;
+  var network = null;
+  // randomly create some nodes and edges
+  //var data = getScaleFreeNetwork(15);
+  var seed = 2;
+
+
+  var nodesArray = [
+  { id: 0, label: "0", title: "Computer Internet Literacy", group: 3, color:"orange" },
+  { id: 2, label:"1", title: "Python Programming", group: 4 },
+  { id: 3, label:"3", title: "Characters Strings and Looping", group: 4 },
+  { id: 5, label:"5", title: "Computational Thinking", group: 4 },
+  { id: 6, label:"6", title: "Debugging", group: 4 },
+  { id: 7, label:"7", title: "HTML and CSS", group: 4 },
+  { id: 8, label:"8", title: "JavaScript", group: 4 },
+  { id: 12, label:"12", title: "Web Development", group: 5 },
+  { id: 13, label:"13", title: "Testing", group: 5 },
+  { id: 16, label:"16", title: "Algorithms", group: 5 },
+  { id: 17, label:"17", title: "Databases", group: 5 },
+  { id: 18, label:"18", title: "Big Data", group: 5 },
+  { id: 19, label:"19", title: "Object Oriented Design", group: 5 }
+  ];
+  var edgesArray = [
+  { from: 0, to: 5 }
+  ];
+
+  nodes = new vis.DataSet(nodesArray);
+  edges = new vis.DataSet(edgesArray);
+
+  // create a network
+  var data = {
+  nodes: nodes,
+  edges: edges
+  };
+
+
+  function setDefaultLocale() {
+    var defaultLocal = navigator.language;
+    var select = document.getElementById('locale');
+    select.selectedIndex = 0; // set fallback value
+    for (var i = 0, j = select.options.length; i < j; ++i) {
+      if (select.options[i].getAttribute('value') === defaultLocal) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
+  function destroy() {
+    if (network !== null) {
+      network.destroy();
+      network = null;
+    }
+  }
+
+  function draw() {
+    destroy();
+    nodes = [];
+    edges = [];
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+    var options = {
+      layout: {randomSeed:seed}, // just to make sure the layout is the same when the locale is changed
+      locale: document.getElementById('locale').value,
+      manipulation: {
+        addNode: function (data, callback) {
+          // filling in the popup DOM elements
+          document.getElementById('operation').innerHTML = "Add Node";
+          document.getElementById('node-id').value = data.id;
+          document.getElementById('node-label').value = data.label;
+          document.getElementById('saveButton').onclick = saveData.bind(this, data, callback);
+          document.getElementById('cancelButton').onclick = clearPopUp.bind();
+          document.getElementById('network-popUp').style.display = 'block';
+        },
+        editNode: function (data, callback) {
+          // filling in the popup DOM elements
+          document.getElementById('operation').innerHTML = "Edit Node";
+          document.getElementById('node-id').value = data.id;
+          document.getElementById('node-label').value = data.label;
+          document.getElementById('saveButton').onclick = saveData.bind(this, data, callback);
+          document.getElementById('cancelButton').onclick = cancelEdit.bind(this,callback);
+          document.getElementById('network-popUp').style.display = 'block';
+        },
+        addEdge: function (data, callback) {
+          if (data.from == data.to) {
+            var r = confirm("Do you want to connect the node to itself?");
+            if (r == true) {
+              callback(data);
+            }
+          }
+          else {
+            callback(data);
+          }
+        }
+      }
+    };
+    network = new vis.Network(container, data, options);
+  }
+
+  function clearPopUp() {
+    document.getElementById('saveButton').onclick = null;
+    document.getElementById('cancelButton').onclick = null;
+    document.getElementById('network-popUp').style.display = 'none';
+  }
+
+  function cancelEdit(callback) {
+    clearPopUp();
+    callback(null);
+  }
+
+  function saveData(data,callback) {
+    data.id = document.getElementById('node-id').value;
+    data.label = document.getElementById('node-label').value;
+    clearPopUp();
+    callback(data);
+  }
+
+  function init() {
+    setDefaultLocale();
+    draw();
+  }
+
+</script>
+
+</head>
+
+<body onload="init();">
+<h1>TEDI-London Learning Tree</h1>
+<h2> Academic Edit Mode </h2>
+
+
+
+
+<div id="network-popUp">
+<span id="operation">node</span> <br>
+<table style="margin:auto;"><tr>
+  <td>id</td><td><input id="node-id" value="new value" /></td>
+</tr>
+  <tr>
+    <td>label</td><td><input id="node-label" value="new value" /></td>
+  </tr></table>
+<input type="button" value="save" id="saveButton" />
+<input type="button" value="cancel" id="cancelButton" />
+</div>
+<br />
+<div id="mynetwork"></div>
+
+<p>
+  <label for="locale">Select a locale:</label>
+  <select id="locale" onchange="draw();">
+    <option value="en">en</option>
+    <option value="cn">cn</option>
+    <option value="cs">cs</option>
+    <option value="de">de</option>
+    <option value="es">es</option>
+    <option value="fr">fr</option>
+    <option value="it">it</option>
+    <option value="nl">nl</option>
+    <option value="pt-br">pt</option>
+    <option value="ru">ru</option>
+    <option value="uk">uk</option>
+  </select>
+</p>
+
+</body>
+</html>
+
+<!-- Change the src for the new js file
+<script type="text/javascript" src="script.js"></script>
+
+-->
