@@ -221,27 +221,20 @@
       for (nodeID=0; nodeID < checkNodes.length; nodeID++){
 
         let clickedNode = nodes.get(checkNodes[nodeID]);
-        console.log("the clicked node is ")
-        if (clickedNode.completed == "true"){
-          clickedNode.color = {
+          if (clickedNode.completed == "true"){
+            clickedNode.color = {
             background: '#42f590'
           }
-
         }
         else{
-          clickedNode.color = {
+            clickedNode.color = {
             background: '#f0d700'
           }
-
         }
-
        nodes.update(clickedNode);
-
       }
 
-
     });
-
 
 
     function startNetwork(data) {
@@ -326,7 +319,7 @@
     }
 
     var nodesArray = [
-    { id: 0, label: "Computer Internet Literacy", group: 4,  module:1, completed:"true" },
+    { id: 0, label: "Computer Internet Literacy", group: 4,  module:1, completed:"true", shape: 'circularImage', image: 'start.png' },
     { id: 2, label: "Python Programming", group: 4, module:1, completed:"true"},
     { id: 3, label: "Characters Strings and Looping", group: 4,module:1, completed:"true" },
     { id: 5, label: "Computational Thinking", group: 4,module:1, completed:"true" },
@@ -339,7 +332,7 @@
     { id: 17, label: "Databases", group: 4, module:1, completed:"false" },
     { id: 18, label: "Big Data", group: 4,module:1 , completed:"false"},
     { id: 19, label: "Object Oriented Design", group: 4 ,module:3, completed:"false"},
-    { id: 20, label: "A learning node", group: 7, module: 3, completed:"false"},
+    { id: 20, label: "A learning node", group: 7, module: 3, completed:"false", shape: 'circularImage', image: 'start.png' },
     { id: 21, label: "A learning node", group: 7, module: 3, completed:"false"},
     { id: 22, label: "A learning node", group: 6, module: 3, completed:"false"},
     { id: 23, label: "A learning node", group: 6, module: 3, completed:"false"},
@@ -356,7 +349,7 @@
     { id: 34, label: "A learning node", group: 6, module: 3, completed:"false"},
     { id: 35, label: "A learning node", group: 6, module: 2, completed:"false"},
     { id: 36, label: "A learning node", group: 7, module: 2, completed:"false"},
-    { id: 37, label: "A learning node", group: 6, module: 3, completed:"false"},
+    { id: 37, label: "A learning node", group: 6, module: 3, completed:"false", shape: 'circularImage', image: 'start.png' },
     { id: 38, label: "A learning node", group: 6, module: 2, completed:"false"},
     { id: 39, label: "A learning node", group: 6, module: 2, completed:"false"},
     { id: 40, label: "A learning node", group: 7, module: 2, completed:"false"},
@@ -373,7 +366,7 @@
     { id: 51, label: "Node", group: 3, module: 3, completed:"false"},
     { id: 52, label: "Node", group: 3, module: 3, completed:"false"},
     { id: 53, label: "Node", group: 3, module: 3, completed:"false"},
-    { id: 54, label: "Node", group: 3, module: 3, completed:"false"}
+    { id: 54, label: "Node", group: 3, module: 3, completed:"false", shape: 'circularImage', image: 'start.png' }
 
     ];
     var edgesArray = [
