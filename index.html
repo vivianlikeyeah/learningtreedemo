@@ -208,6 +208,37 @@
       mode = "Explore"
         $("#nodeFilterSelect").fadeOut(300);
         $("#title").html("The Learning Tree (Explore Mode)");
+        checkNodes = [0,2,3,5,6,7,8,12,13,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54]
+        for (nodeID=0; nodeID < checkNodes.length; nodeID++){
+
+            let clickedNode = nodes.get(checkNodes[nodeID]);
+            if (clickedNode.group == 4){
+              clickedNode.color = {
+              background: '#82cbff',
+              border: '#82cbff'
+              }
+            }
+            else if (clickedNode.group == 3){
+              clickedNode.color = {
+              background: '#8682ff',
+              border: '#8682ff'
+              }
+            }
+            else if (clickedNode.group==6){
+              clickedNode.color = {
+              background: '#ff829d',
+              border: '#ff829d'
+              }
+            }
+            else{
+              clickedNode.color = {
+              background: '#ff9f82',
+              border: '#ff9f82'
+              }
+            }
+            nodes.update(clickedNode);
+        }
+
 
     });
     //Check and see if we can update a node colour when we click this
@@ -220,18 +251,18 @@
       checkNodes = [0,2,3,5,6,7,8,12,13,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54]
       for (nodeID=0; nodeID < checkNodes.length; nodeID++){
 
-        let clickedNode = nodes.get(checkNodes[nodeID]);
+          let clickedNode = nodes.get(checkNodes[nodeID]);
           if (clickedNode.completed == "true"){
             clickedNode.color = {
-            background: '#42f590'
+            background: '#b3ffb5'
+            }
           }
-        }
-        else{
+          else{
             clickedNode.color = {
-            background: '#f0d700'
+            background: '#FFFFFF'
+            }
           }
-        }
-       nodes.update(clickedNode);
+          nodes.update(clickedNode);
       }
 
     });
@@ -248,13 +279,22 @@
           size: 12,
           color: "white"
         },
-        borderWidth: 2,
+        borderWidth: 5,
         shadow: true
       },
       edges: {
         width: 2,
         shadow: true
-      }
+      }, groups: {
+            4: {
+                color: {background: '#82cbff', border: '#82cbff'}
+            },
+            3:{
+                color: {background: '#8682ff', border: '#8682ff'}
+            },
+            6:{color:{background: '#ff829d',  border: '#ff829d'}},
+            7:{color:{background: '#ff9f82', border: '#ff9f82'}}
+          }
       };
 
       network = new vis.Network(container, data, options)
